@@ -76,7 +76,15 @@ class Movie(db.Model):
     
 @app.route('/')
 def index():
-    name=User.query.first()
-    movies=Movies.query.all()
-    return render_template('index.html',name=name,movies=movies)
+    movies=Movie.query.all()
+    return render_template('index.html',movies=movies)
+    
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
+    
+@app.context_processor
+def inject_user():
+    user=User.query.first().name
+    return dict(user=user)
     
