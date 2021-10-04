@@ -2,9 +2,8 @@ from flask import Flask,escape,url_for,render_template,request,flash,redirect
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 from werkzeug.security import generate_password_hash,check_password_hash
-import click
 from flask_login import LoginManager,UserMixin,login_user,logout_user,login_required,current_user
-
+import click
 
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:w@127.0.0.1:3306/watch'
@@ -67,14 +66,14 @@ def admin(username, password):
     if user is not None:
         click.echo('Updating user...')
         user.username = username
-        user.set_password(password)  # 设置密码
+        user.set_password(password)  
     else:
         click.echo('Creating user...')
         user = User(username=username, name='Admin')
-        user.set_password(password)  # 设置密码
+        user.set_password(password)  
         db.session.add(user)
 
-    db.session.commit()  # 提交数据库会话
+    db.session.commit() 
     click.echo('Done.')
    
 class User(db.Model,UserMixin):
@@ -159,11 +158,11 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
-@login_required  # 用于视图保护，后面会详细介绍
+@login_required 
 def logout():
-    logout_user()  # 登出用户
+    logout_user() 
     flash('Goodbye.')
-    return redirect(url_for('index'))  # 重定向回首页     
+    return redirect(url_for('index'))  
     
 @app.route('/settings',methods=['GET','POST'])
 @login_required
